@@ -20,8 +20,8 @@ app.get('/', (req, res) => {
 });
 
 // --> Create === POST
-app.get('/api/create', (req, res) => {
-	async () => {
+app.post('/api/create', (req, res) => {
+	(async () => {
 		try {
 			await db
 				.collection('products')
@@ -37,9 +37,22 @@ app.get('/api/create', (req, res) => {
 			console.error(error);
 			return res.status(500).send(error);
 		}
-	};
+	})();
 });
 // --> Read === GET
+app.get('/api/read/:id', (req, res) => {
+	(async () => {
+		try {
+			const document = db.collection('products').doc(req.params.id);
+			let products = await document.get();
+			let response = products.data();
+			return res.status(200).send(response);
+		} catch (error) {
+			console.error(error);
+			return res.status(500).send(error);
+		}
+	})();
+});
 
 // --> Update === PUT
 
